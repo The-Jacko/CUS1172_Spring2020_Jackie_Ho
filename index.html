@@ -9,6 +9,7 @@
     integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
     crossorigin="anonymous">
   <link rel="stylesheet" href="./assets/index.css">
+  <script src="./assets/index.js"></script>
   <title>Quiz</title>
 </head>
 
@@ -18,9 +19,14 @@
     <h1 class="display-4 text-center">Coding Quiz</h1>
   </div>
 
-  <form id="user-data" class="form-inline center">
-    <input id="name" class="form-control mr-2" type="text" placeholder="Enter your name">
-    <select id="quiz-type" class="form-control mr-2" name="Quiz-type">
+  <div class="center">
+    <h3 id="name" class="text-center"></h3>
+    <h4 id="score" class="text-center"></h4>
+  </div>
+
+  <form id="user_form" class="form-inline center">
+    <input id="name_input" class="form-control mr-2" type="text" placeholder="Enter your name">
+    <select id="quiz_type" class="form-control mr-2" name="Quiz type">
       <option value="1">Quiz 1</option>
       <option value="2">Quiz 2</option>
     </select>
