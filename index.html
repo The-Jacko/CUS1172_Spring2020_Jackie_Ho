@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    rel="stylesheet"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+    crossorigin="anonymous">
+  <link rel="stylesheet" href="./assets/index.css">
+  <title>Quiz</title>
+</head>
+
+<body>
+
+  <div class="jumbotron">
+    <h1 class="display-4 text-center">Coding Quiz</h1>
+  </div>
+
+  <form id="user-data" class="form-inline center">
+    <input id="name" class="form-control mr-2" type="text" placeholder="Enter your name">
+    <select id="quiz-type" class="form-control mr-2" name="Quiz-type">
+      <option value="1">Quiz 1</option>
+      <option value="2">Quiz 2</option>
+    </select>
+    <input class="btn btn-info" type="submit">
+  </form>
+
+  <div id="quiz" class="container">
+    <h2 id="question"></h2>
+  </div>
+
+</body>
+
+</html>
