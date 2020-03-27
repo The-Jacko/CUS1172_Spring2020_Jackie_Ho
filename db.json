@@ -2,24 +2,28 @@
     "quiz1": [{
             "question": "What is your name?",
             "choices": ["Jackie", "Bob", "Sarah"],
-            "answer": "Jackie"
+            "answer": "Jackie",
+            "reason": "Your name is Jackie!!!"
         },
         {
             "question": "How old are you?",
             "choices": [18, 19, 20, 21],
-            "answer": 21
+            "answer": 21,
+            "reason": "You're 21!!!"
         }
     ],
 
     "quiz2": [{
             "question": "What is your favorite car?",
-            "choices": ["lambo, ferrari, bugatti, audi"],
-            "answer": "lambo"
+            "choices": ["lambo", "ferrari", "bugatti", "audi"],
+            "answer": "lambo",
+            "reason": "They look like jets!"
         },
         {
             "question": "Who is your favorite basketball player?",
             "choices": ["MJ", "Kobe", "Lebron", "KD", "Curry"],
-            "answer": "Kobe"
+            "answer": "Kobe",
+            "reason": "KOBEEE!!!!!"
         }
     ]
 

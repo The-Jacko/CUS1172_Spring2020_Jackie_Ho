@@ -1,5 +1,6 @@
 let answered = [];
-let data;
+let quiz_data;
+let name;
 
 document.addEventListener('DOMContentLoaded', () => {
     document.querySelector("#user_form").onsubmit = () => {
@@ -11,12 +12,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
 let get_api_data = async (url) => {
     let response = await fetch(url);
-    data = await response.json();
-    generate_question(data);
+    quiz_data = await response.json();
+    generate_question(quiz_data);
 }
 
 function display_name() {
-    let name = document.querySelector("#name_input").value;
+    name = document.querySelector("#name_input").value;
 
     document.querySelector("#name").textContent = name;
     document.querySelector("#score").textContent = "Score: 0/0";
@@ -34,6 +35,9 @@ function display_quiz() {
         question.textContent = "Quiz 2";
         url = url + "quiz2"
     }
+
+    // resets the answered questions everytime a new quiz is generated
+    answered = []
     get_api_data(url);
 }
 
@@ -46,18 +50,24 @@ function generate_question(data) {
         }
         let question = data[random];
 
-        try {
-            document.querySelector(".quiz").remove();
-        } catch (err) {
-
-        }
+        remove_current_quiz();
         display_question(question);
         answered.push(random);
+    } else {
+        console.log("End of quiz");
     }
 }
 
 function random_num(length) {
     return Math.floor(Math.random() * length);
+}
+
+function remove_current_quiz() {
+    try {
+        document.querySelector(".quiz").remove();
+    } catch (err) {
+
+    }
 }
 
 function display_question(data) {
@@ -78,10 +88,10 @@ function display_question(data) {
             if (choice.checked) {
                 if (choice.value == data.answer) {
                     // handle correct answer
-                    console.log(true);
+                    correct_answer();
                 } else {
                     // handle incorrect answer
-                    console.log(false);
+                    wrong_answer(data.reason);
                 }
             }
         }
@@ -106,4 +116,25 @@ function create_choices(choice) {
     radio_button.setAttribute("name", "choice");
     radio_button.setAttribute("value", choice);
     create_element("#choices", "label", "class", "choice_text", choice)
+}
+
+function correct_answer() {
+    let feedback_arr = ["Great Job", "Excellent", "Awesome", "You're A Superstar", "Keep Going, You're Doing Amazing", "Amazing", "Fantastic", "Good Job", "Brilliant", "Genius"]
+    let random = random_num(feedback_arr.length);
+    let feedback = `${feedback_arr[random]} ${name}!`;
+    create_element(".quiz", "h1", "id", "correct_feedback", feedback);
+    setTimeout(() => {
+        generate_question(quiz_data);
+    }, 3000);
+    console.log('hello');
+}
+
+function wrong_answer(reason) {
+    create_element(".quiz", "form", "id", "incorrect_form", "");
+    create_element("#incorrect_form", "h1", "id", "incorrect_feedback", reason);
+    create_element("#incorrect_form", "button", "class", "incorrect_feedback_button btn btn-info", "I Understand");
+    document.querySelector("#incorrect_form").onsubmit = () => {
+        generate_question(quiz_data);
+        return false;
+    }
 }
