@@ -35,7 +35,7 @@ function display_name() {
 function display_quiz() {
     let quiz_choice = document.querySelector("#quiz_choice").value;
     let question = document.querySelector("#quiz_type");
-    let url = "https://my-json-server.typicode.com/jho2016/Webpage-Graphics-Quiz-Project/";
+    let url = "https://my-json-server.typicode.com/jho2016/Quiz_Question_Database/";
 
     if (quiz_choice == "1") {
         question.textContent = "Quiz 1";
