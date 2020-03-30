@@ -94,8 +94,16 @@ function display_question(data) {
     create_element(".quiz", "h3", "id", "question", data.question);
 
     create_element(".quiz", "div", "id", "choices", "");
-    for (choice of data.choices) {
-        create_choices(choice);
+
+    let type = data.type;
+    if (type == "multple choice") {
+        create_choices(data.choices);
+    } else if (type == "true false") {
+        create_choices(data.choices);
+    } else if (type == "pictures") {
+        // create_pictures(data.choices);
+    } else if (type == "short answer") {
+
     }
 
     check_answer(data);
@@ -137,10 +145,12 @@ function create_element(parent, element, attribute, attribute_value, content) {
 }
 
 
-function create_choices(choice) {
-    let button = create_element("#choices", "input", "type", "button", "");
-    button.setAttribute("value", choice);
-    button.setAttribute("class", "choice btn btn-info")
+function create_choices(choices) {
+    for (choice of choices) {
+        let button = create_element("#choices", "input", "type", "button", "");
+        button.setAttribute("value", choice);
+        button.setAttribute("class", "choice btn btn-info")
+    }
 }
 
 
