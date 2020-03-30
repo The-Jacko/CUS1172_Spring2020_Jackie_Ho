@@ -14,6 +14,10 @@ document.addEventListener('DOMContentLoaded', () => {
         display_quiz();
         return false;
     }
+
+    document.querySelector("#quiz_choice").addEventListener('change', () => {
+        document.querySelector("#quiz_type_submit").value = "Start"
+    })
 })
 
 
@@ -29,6 +33,7 @@ function display_name() {
 
     document.querySelector("#name").textContent = name;
     document.querySelector("#score").textContent = "Score: 0/0";
+    document.querySelector("#quiz_type_submit").value = "Restart"
 }
 
 
@@ -88,32 +93,35 @@ function display_question(data) {
     create_element("body", "div", "class", "quiz container", "");
     create_element(".quiz", "h3", "id", "question", data.question);
 
-    create_element(".quiz", "form", "id", "choices", "");
+    create_element(".quiz", "div", "id", "choices", "");
     for (choice of data.choices) {
         create_choices(choice);
     }
 
-    create_element("#choices", "button", "class", "submit btn btn-info",
-        "Submit");
+    check_answer(data);
+}
 
-    document.querySelector("#choices").onsubmit = () => {
-        let choices = document.querySelectorAll(".choice")
-        // disable the submit button
-        for (choice of choices) {
-            if (choice.checked) {
-                document.querySelector(".submit").disabled = true;
-                document.querySelector("#quiz_type_submit").disabled = true;
-                if (choice.value == data.answer) {
-                    // handle correct answer
-                    correct_answer();
-                } else {
-                    // handle incorrect answer
-                    wrong_answer(data.reason);
-                }
+function check_answer(data) {
+    let buttons = document.querySelectorAll(".choice")
+    for (button of buttons) {
+        button.addEventListener('click', function () {
+            disable_buttons(buttons)
+            this.classList.add("selected-choice")
+            if (this.value == data.answer) {
+                correct_answer();
+            } else {
+                wrong_answer(data.reason);
             }
-        }
-        return false;
+            return false;
+        })
     }
+}
+
+function disable_buttons(buttons) {
+    for (button of buttons) {
+        button.classList.add("disabled-button");
+    }
+    document.querySelector("#quiz_type_submit").disabled = true;
 }
 
 
@@ -130,11 +138,9 @@ function create_element(parent, element, attribute, attribute_value, content) {
 
 
 function create_choices(choice) {
-    let radio_button = create_element("#choices", "input", "class", "choice", "");
-    radio_button.setAttribute("type", "radio");
-    radio_button.setAttribute("name", "choice");
-    radio_button.setAttribute("value", choice);
-    create_element("#choices", "label", "class", "choice_text", choice)
+    let button = create_element("#choices", "input", "type", "button", "");
+    button.setAttribute("value", choice);
+    button.setAttribute("class", "choice btn btn-info")
 }
 
 
