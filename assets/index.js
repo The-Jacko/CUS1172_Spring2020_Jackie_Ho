@@ -96,7 +96,7 @@ function display_question(data) {
     create_element(".quiz", "div", "id", "choices", "");
 
     let type = data.type;
-    if (type == "multple choice") {
+    if (type == "multiple choice") {
         create_choices(data.choices);
     } else if (type == "true false") {
         create_choices(data.choices);
