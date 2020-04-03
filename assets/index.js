@@ -103,6 +103,8 @@ function display_question(data) {
         create_pictures(data.choices);
     } else if (type == "short answer") {
         create_short_answer();
+    } else if (type == "fill in") {
+        create_fill_in(data.choices);
     }
 
     check_answer(data);
@@ -122,6 +124,31 @@ function check_answer(data) {
             }
             return false;
         };
+    } else if (data.type == "fill in") {
+        let fill_in_form = document.querySelector("#fill_in");
+        fill_in_form.onsubmit = function () {
+            document.querySelector(".fill_in_submit").disabled = true;
+            let answers = document.querySelectorAll(".fill_in_textbox");
+
+            let incorrect = []
+            for (let i = 0; i < answers.length; i++) {
+                if (answers[i].value != data.answer[i]) {
+                    incorrect.push(i);
+                }
+            }
+
+            if (incorrect.length > 0) {
+                let reason = ""
+                for (i of incorrect) {
+                    reason += `${data.reason[i]}. `;
+                }
+                wrong_answer(reason);
+            } else {
+                correct_answer();
+            }
+
+            return false;
+        }
     } else {
         let buttons = document.querySelectorAll(".choice")
         for (button of buttons) {
@@ -184,6 +211,15 @@ function create_short_answer() {
     textbox.setAttribute("class", "text_answer form-control");
     textbox.setAttribute("placeholder", "Enter Answer Here");
     create_element("#short_answer", "button", "class", "text_answer_submit btn btn-info", "Submit");
+}
+
+function create_fill_in(choices) {
+    create_element("#choices", "form", "id", "fill_in", "");
+    for (choice of choices) {
+        create_element("#fill_in", "span", "class", "fill_in_question", choice)
+        create_element("#fill_in", "input", "class", "fill_in_textbox", "");
+    }
+    create_element("#fill_in", "button", "class", "fill_in_submit btn btn-info", "Submit");
 }
 
 
