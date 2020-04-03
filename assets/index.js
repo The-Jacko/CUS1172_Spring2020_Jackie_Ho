@@ -1,13 +1,13 @@
 let correct = 0;
 let answered = [];
-let quiz_data;
 let name;
 
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener("DOMContentLoaded", () => {
+
     document.querySelector("#user_form").onsubmit = () => {
         // resets the answered questions everytime a new quiz is generated
-        answered = []
+        answered = [];
         correct = 0;
 
         display_name();
@@ -15,10 +15,10 @@ document.addEventListener('DOMContentLoaded', () => {
         return false;
     }
 
-    document.querySelector("#quiz_choice").addEventListener('change', () => {
-        document.querySelector("#quiz_type_submit").value = "Start"
-    })
-})
+    document.querySelector("#quiz_choice").addEventListener("change", () => {
+        document.querySelector("#quiz_type_submit").value = "Start";
+    });
+});
 
 
 let get_api_data = async (url) => {
@@ -94,36 +94,51 @@ function display_question(data) {
     create_element(".quiz", "h3", "id", "question", data.question);
 
     create_element(".quiz", "div", "id", "choices", "");
-
     let type = data.type;
     if (type == "multiple choice") {
         create_choices(data.choices);
     } else if (type == "true false") {
         create_choices(data.choices);
     } else if (type == "pictures") {
-        // create_pictures(data.choices);
+        create_pictures(data.choices);
     } else if (type == "short answer") {
-
+        create_short_answer();
     }
 
     check_answer(data);
 }
 
+
 function check_answer(data) {
-    let buttons = document.querySelectorAll(".choice")
-    for (button of buttons) {
-        button.addEventListener('click', function () {
-            disable_buttons(buttons)
-            this.classList.add("selected-choice")
-            if (this.value == data.answer) {
+    if (data.type == "short answer") {
+        let short_answer_form = document.querySelector("#short_answer");
+        short_answer_form.onsubmit = function () {
+            document.querySelector(".text_answer_submit").disabled = true;
+            let answer = document.querySelector(".text_answer").value;
+            if (answer == data.answer) {
                 correct_answer();
             } else {
                 wrong_answer(data.reason);
             }
             return false;
-        })
+        };
+    } else {
+        let buttons = document.querySelectorAll(".choice")
+        for (button of buttons) {
+            button.addEventListener("click", function () {
+                disable_buttons(buttons)
+                this.classList.add("selected-choice")
+
+                if (this.value == data.answer) {
+                    correct_answer();
+                } else {
+                    wrong_answer(data.reason);
+                }
+            });
+        }
     }
 }
+
 
 function disable_buttons(buttons) {
     for (button of buttons) {
@@ -149,8 +164,26 @@ function create_choices(choices) {
     for (choice of choices) {
         let button = create_element("#choices", "input", "type", "button", "");
         button.setAttribute("value", choice);
-        button.setAttribute("class", "choice btn btn-info")
+        button.setAttribute("class", "choice btn btn-info");
     }
+}
+
+
+function create_pictures(choices) {
+    for (choice of choices) {
+        let image = create_element("#choices", "input", "type", "image", "");
+        image.setAttribute("src", choice);
+        image.setAttribute("value", choice);
+        image.setAttribute("class", "choice");
+    }
+}
+
+function create_short_answer() {
+    create_element("#choices", "form", "id", "short_answer", "");
+    let textbox = create_element("#short_answer", "input", "type", "text", "");
+    textbox.setAttribute("class", "text_answer form-control");
+    textbox.setAttribute("placeholder", "Enter Answer Here");
+    create_element("#short_answer", "button", "class", "text_answer_submit btn btn-info", "Submit");
 }
 
 
@@ -162,7 +195,7 @@ function correct_answer() {
     update_score(true);
     setTimeout(() => {
         generate_question(quiz_data);
-    }, 3000);
+    }, 1000);
 }
 
 
