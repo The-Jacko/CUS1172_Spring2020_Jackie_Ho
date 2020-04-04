@@ -1,6 +1,6 @@
 let correct = 0;
 let answered = [];
-let name;
+let name, time;
 
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -25,8 +25,10 @@ function start_quiz() {
 }
 
 function timer() {
+    clearInterval(time);
     let seconds = 0;
-    setInterval(() => {
+
+    time = setInterval(() => {
         seconds++;
         hours = Math.floor(seconds / 3600);
         minutes = Math.floor(seconds / 60);
