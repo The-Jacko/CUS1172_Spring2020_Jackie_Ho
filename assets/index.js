@@ -5,20 +5,42 @@ let name;
 
 document.addEventListener("DOMContentLoaded", () => {
 
-    document.querySelector("#user_form").onsubmit = () => {
-        // resets the answered questions everytime a new quiz is generated
-        answered = [];
-        correct = 0;
-
-        display_name();
-        display_quiz();
-        return false;
-    }
+    document.querySelector("#user_form").onsubmit = start_quiz;
 
     document.querySelector("#quiz_choice").addEventListener("change", () => {
         document.querySelector("#quiz_type_submit").value = "Start";
     });
 });
+
+function start_quiz() {
+    // resets the answered questions everytime a new quiz is generated
+    answered = [];
+    correct = 0;
+
+    timer();
+    remove_end_quiz_text();
+    display_name();
+    display_quiz();
+    return false;
+}
+
+function timer() {
+    let seconds = 0;
+    setInterval(() => {
+        seconds++;
+        hours = Math.floor(seconds / 3600);
+        minutes = Math.floor(seconds / 60);
+        document.querySelector("#timer").textContent = `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}:${(seconds%60).toString().padStart(2, "0")}`;
+    }, 1000)
+}
+
+function remove_end_quiz_text() {
+    try {
+        document.querySelector("#end").remove();
+    } catch {
+
+    }
+}
 
 
 let get_api_data = async (url) => {
@@ -59,6 +81,8 @@ function generate_question(data) {
     // fixes the problem of getting an answer right and then pressing submit, if you click it before the 3 seconds is up,
     // a new question will get generated even though you already generated a new question
     document.querySelector("#quiz_type_submit").disabled = false;
+    remove_current_quiz();
+
     if (answered.length < data.length) {
         let random = random_num(data.length);
         while (answered.includes(random)) {
@@ -67,10 +91,9 @@ function generate_question(data) {
         let question = data[random];
         answered.push(random);
 
-        remove_current_quiz();
         display_question(question);
     } else {
-        console.log("End of quiz");
+        end_of_quiz();
     }
 }
 
@@ -205,6 +228,7 @@ function create_pictures(choices) {
     }
 }
 
+
 function create_short_answer() {
     create_element("#choices", "form", "id", "short_answer", "");
     let textbox = create_element("#short_answer", "input", "type", "text", "");
@@ -212,6 +236,7 @@ function create_short_answer() {
     textbox.setAttribute("placeholder", "Enter Answer Here");
     create_element("#short_answer", "button", "class", "text_answer_submit btn btn-info", "Submit");
 }
+
 
 function create_fill_in(choices) {
     create_element("#choices", "form", "id", "fill_in", "");
@@ -253,4 +278,21 @@ function update_score(bool) {
         correct++;
     }
     score.textContent = `Score: ${correct}/${answered.length}`;
+}
+
+
+function end_of_quiz() {
+    create_element("body", "div", "id", "end", "");
+
+    if (correct / answered.length >= .80) {
+        create_element("#end", "h2", "id", "passed_quiz", `Congraduations ${name} you passed the quiz!`);
+    } else {
+        create_element("#end", "h2", "id", "failed_quiz", `Sorry ${name}, you failed.`);
+        create_element("#end", "button", "class", "retry btn btn-info", "Retry");
+        create_element("#end", "button", "class", "exit btn btn-info", "Exit");
+        document.querySelector(".retry").addEventListener("click", start_quiz);
+        document.querySelector(".exit").addEventListener("click", function () {
+            location.reload();
+        })
+    }
 }
