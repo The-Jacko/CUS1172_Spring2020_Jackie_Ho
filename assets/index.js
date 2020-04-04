@@ -141,8 +141,10 @@ function check_answer(data) {
         let short_answer_form = document.querySelector("#short_answer");
         short_answer_form.onsubmit = function () {
             document.querySelector(".text_answer_submit").disabled = true;
-            let answer = document.querySelector(".text_answer").value;
-            if (answer == data.answer) {
+            let user_answer = document.querySelector(".text_answer").value;
+            const answer = data.answer;
+
+            if (user_answer.trim() == answer) {
                 correct_answer();
             } else {
                 wrong_answer(data.reason);
@@ -157,7 +159,7 @@ function check_answer(data) {
 
             let incorrect = []
             for (let i = 0; i < answers.length; i++) {
-                if (answers[i].value != data.answer[i]) {
+                if (answers[i].value.toLowerCase().trim() != data.answer[i].toLowerCase().trim()) {
                     incorrect.push(i);
                 }
             }
@@ -276,10 +278,14 @@ function wrong_answer(reason) {
 
 function update_score(bool) {
     let score = document.querySelector("#score");
+    let grade = document.querySelector("#grade");
+
     if (bool == true) {
         correct++;
     }
     score.textContent = `Score: ${correct}/${answered.length}`;
+    grade.textContent = `${((correct/answered.length)*100).toFixed(2)}%`;
+
 }
 
 
@@ -287,9 +293,9 @@ function end_of_quiz() {
     create_element("body", "div", "id", "end", "");
 
     if (correct / answered.length >= .80) {
-        create_element("#end", "h2", "id", "passed_quiz", `Congraduations ${name} you passed the quiz!`);
+        create_element("#end", "h2", "id", "passed_quiz", `Congraduations ${name}, you passed the quiz!`);
     } else {
-        create_element("#end", "h2", "id", "failed_quiz", `Sorry ${name}, you failed.`);
+        create_element("#end", "h2", "id", "failed_quiz", `Sorry ${name}, you failed the quiz.`);
         create_element("#end", "button", "class", "retry btn btn-info", "Retry");
         create_element("#end", "button", "class", "exit btn btn-info", "Exit");
         document.querySelector(".retry").addEventListener("click", start_quiz);
