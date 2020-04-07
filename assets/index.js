@@ -244,9 +244,17 @@ function create_short_answer() {
 
 function create_fill_in(choices) {
     create_element("#choices", "form", "id", "fill_in", "");
-    for (choice of choices) {
-        create_element("#fill_in", "span", "class", "fill_in_question", choice)
-        create_element("#fill_in", "input", "class", "fill_in_textbox", "");
+    let line_num = 0;
+    for (line of choices) {
+        create_element("#fill_in", "div", "class", `fill_in_line${line_num}`, "");
+        for (choice of line) {
+            if (choice != "") {
+                create_element(`.fill_in_line${line_num}`, "span", "class", "fill_in_question", choice)
+            } else {
+                create_element(`.fill_in_line${line_num}`, "input", "class", "fill_in_textbox", "");
+            }
+        }
+        line_num++;
     }
     create_element("#fill_in", "button", "class", "fill_in_submit btn btn-info", "Submit");
 }
