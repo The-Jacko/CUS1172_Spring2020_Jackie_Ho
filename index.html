@@ -19,23 +19,27 @@
     <h1 class="display-4 text-center">Coding Quiz</h1>
   </div>
 
-  <div class="center">
-    <h3 id="name" class="text-center"></h3>
-    <h4 id="score" class="text-center"></h4>
-    <h4 id="grade"></h4>
-    <h4 id="timer" class="text-center"></h4>
+  <div id="user_data">
+    <div class="center">
+      <h3 id="name" class="text-center"></h3>
+      <h4 id="score" class="text-center"></h4>
+      <h4 id="grade" class="text-center"></h4>
+      <h4 id="timer" class="text-center"></h4>
+    </div>
+
+    <form id="user_form" class="form-inline center">
+      <input id="name_input" class="form-control mr-2" type="text" placeholder="Enter your name">
+      <select id="quiz_choice" class="form-control mr-2" name="Quiz type">
+        <option value="1">Quiz 1</option>
+        <option value="2">Quiz 2</option>
+      </select>
+      <input id="quiz_type_submit" class="btn btn-info" type="submit" value="Start">
+    </form>
   </div>
 
-  <form id="user_form" class="form-inline center">
-    <input id="name_input" class="form-control mr-2" type="text" placeholder="Enter your name">
-    <select id="quiz_choice" class="form-control mr-2" name="Quiz type">
-      <option value="1">Quiz 1</option>
-      <option value="2">Quiz 2</option>
-    </select>
-    <input id="quiz_type_submit" class="btn btn-info" type="submit" value="Start">
-  </form>
-
-  <h1 class="container text-center" id="quiz_type"></h1>
+  <div id="quiz_section">
+    <h1 class="container text-center" id="quiz_type"></h1>
+  </div>
 
 </body>
 

@@ -32,7 +32,7 @@ function timer() {
         seconds++;
         hours = Math.floor(seconds / 3600);
         minutes = Math.floor(seconds / 60);
-        document.querySelector("#timer").textContent = `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}:${(seconds%60).toString().padStart(2, "0")}`;
+        document.querySelector("#timer").textContent = `Timer: ${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}:${(seconds%60).toString().padStart(2, "0")}`;
     }, 1000)
 }
 
@@ -58,6 +58,7 @@ function display_name() {
     document.querySelector("#name").textContent = name;
     document.querySelector("#score").textContent = "Score: 0/0";
     document.querySelector("#quiz_type_submit").value = "Restart"
+    document.querySelector("#name_input").style.display = "none";
 }
 
 
@@ -115,7 +116,7 @@ function remove_current_quiz() {
 
 
 function display_question(data) {
-    create_element("body", "div", "class", "quiz container", "");
+    create_element("#quiz_section", "div", "class", "quiz container", "");
     create_element(".quiz", "h3", "id", "question", data.question);
 
     create_element(".quiz", "div", "id", "choices", "");
@@ -215,6 +216,8 @@ function create_element(parent, element, attribute, attribute_value, content) {
 
 
 function create_choices(choices) {
+    let container = document.querySelector("#choices");
+    container.classList.add("flex_box_buttons")
     for (choice of choices) {
         let button = create_element("#choices", "input", "type", "button", "");
         button.setAttribute("value", choice);
@@ -228,7 +231,7 @@ function create_pictures(choices) {
         let image = create_element("#choices", "input", "type", "image", "");
         image.setAttribute("src", choice);
         image.setAttribute("value", choice);
-        image.setAttribute("class", "choice");
+        image.setAttribute("class", "choice img-thumbnail");
     }
 }
 
@@ -243,7 +246,8 @@ function create_short_answer() {
 
 
 function create_fill_in(choices) {
-    create_element("#choices", "form", "id", "fill_in", "");
+    let fill_in_form = create_element("#choices", "form", "id", "fill_in", "");
+    fill_in_form.setAttribute("class", "form-inline")
     let line_num = 0;
     for (line of choices) {
         create_element("#fill_in", "div", "class", `fill_in_line${line_num}`, "");
@@ -251,7 +255,7 @@ function create_fill_in(choices) {
             if (choice != "") {
                 create_element(`.fill_in_line${line_num}`, "span", "class", "fill_in_question", choice)
             } else {
-                create_element(`.fill_in_line${line_num}`, "input", "class", "fill_in_textbox", "");
+                create_element(`.fill_in_line${line_num}`, "input", "class", "fill_in_textbox form-control", "");
             }
         }
         line_num++;
@@ -292,13 +296,13 @@ function update_score(bool) {
         correct++;
     }
     score.textContent = `Score: ${correct}/${answered.length}`;
-    grade.textContent = `${((correct/answered.length)*100).toFixed(2)}%`;
+    grade.textContent = `Grade: ${((correct/answered.length)*100).toFixed(2)}%`;
 
 }
 
 
 function end_of_quiz() {
-    create_element("body", "div", "id", "end", "");
+    create_element("#quiz_section", "div", "id", "end", "");
 
     if (correct / answered.length >= .80) {
         create_element("#end", "h2", "id", "passed_quiz", `Congraduations ${name}, you passed the quiz!`);

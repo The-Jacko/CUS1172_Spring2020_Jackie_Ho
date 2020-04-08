@@ -3,6 +3,14 @@ body * {
     margin-bottom: .25em;
 }
 
+body {
+    background-color: #E9ECF0;
+}
+
+#user_data {
+    background-color: white;
+}
+
 .jumbotron {
     margin-top: 0;
     padding-top: 32px;
@@ -16,7 +24,7 @@ body * {
 }
 
 .quiz {
-    width: 50%;
+    width: 66%;
     margin-left: auto;
     margin-right: auto;
 }
@@ -27,4 +35,53 @@ body * {
 
 .selected-choice {
     border: 3px solid black;
+}
+
+.text_answer {
+    width: 200px;
+}
+
+.text_answer_submit {
+    display: block;
+}
+
+#quiz_section {
+    background-color: #E9ECF0;
+}
+
+#question {
+    font-size: 3em;
+    text-transform: capitalize;
+}
+
+input[type=image] {
+    width: 45%;
+    height: 290px;
+}
+
+input[type=image]:nth-child(even) {
+    float: right;
+}
+
+#fill_in {
+    font-size: 1.5em;
+}
+
+.fill_in_textbox {
+    margin-left: .4em;
+    margin-right: .4em;
+}
+
+.fill_in_submit {
+    display: block;
+}
+
+input[type=button].choice {
+    font-size: 1.5em;
+    min-width: parent;
+}
+
+.flex_box_buttons {
+    display: flex;
+    flex-direction: column;
 }
