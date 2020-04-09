@@ -51,11 +51,10 @@ body {
 
 #question {
     font-size: 3em;
-    text-transform: capitalize;
 }
 
 input[type=image] {
-    width: 45%;
+    width: 49%;
     height: 290px;
 }
 
@@ -70,6 +69,8 @@ input[type=image]:nth-child(even) {
 .fill_in_textbox {
     margin-left: .4em;
     margin-right: .4em;
+    width: 150px;
+    display: inline;
 }
 
 .fill_in_submit {
@@ -85,4 +86,18 @@ input[type=button].choice {
 .flex_box_buttons {
     display: flex;
     flex-direction: column;
+}
+
+#end {
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#end button {
+    width: 48%;
+}
+
+#end button:nth-child(odd) {
+    float: right;
 }

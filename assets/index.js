@@ -1,6 +1,6 @@
 let correct = 0;
 let answered = [];
-let name, time;
+let name, time, quiz_data;
 
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -57,7 +57,8 @@ function display_name() {
 
     document.querySelector("#name").textContent = name;
     document.querySelector("#score").textContent = "Score: 0/0";
-    document.querySelector("#quiz_type_submit").value = "Restart"
+    document.querySelector("#grade").textContent = "Grade: 0%"
+    document.querySelector("#quiz_type_submit").value = "Restart";
     document.querySelector("#name_input").style.display = "none";
 }
 
@@ -65,14 +66,14 @@ function display_name() {
 function display_quiz() {
     let quiz_choice = document.querySelector("#quiz_choice").value;
     let question = document.querySelector("#quiz_type");
-    let url = "https://my-json-server.typicode.com/jho2016/Quiz_Question_Database/";
+    let url;
 
     if (quiz_choice == "1") {
-        question.textContent = "Quiz 1";
-        url = url + "quiz1"
+        question.textContent = "Web Development Quiz";
+        url = "https://my-json-server.typicode.com/jho2016/Quiz_Question_Database_1/quiz1";
     } else {
-        question.textContent = "Quiz 2";
-        url = url + "quiz2"
+        question.textContent = "General Computer Science";
+        url = "https://my-json-server.typicode.com/jho2016/Quiz_Question_Database_2/quiz2";
     }
 
     get_api_data(url);
@@ -118,6 +119,7 @@ function remove_current_quiz() {
 function display_question(data) {
     create_element("#quiz_section", "div", "class", "quiz container", "");
     create_element(".quiz", "h3", "id", "question", data.question);
+    create_element(".quiz", "div", "id", "feedback", "");
 
     create_element(".quiz", "div", "id", "choices", "");
     let type = data.type;
@@ -128,7 +130,7 @@ function display_question(data) {
     } else if (type == "pictures") {
         create_pictures(data.choices);
     } else if (type == "short answer") {
-        create_short_answer();
+        create_short_answer(data.choices);
     } else if (type == "fill in") {
         create_fill_in(data.choices);
     }
@@ -236,7 +238,11 @@ function create_pictures(choices) {
 }
 
 
-function create_short_answer() {
+function create_short_answer(choices) {
+    if (choices) {
+        let image = create_element("#choices", "img", "src", choices, "");
+        image.setAttribute("class", "question_picture img-thumbnail");
+    }
     create_element("#choices", "form", "id", "short_answer", "");
     let textbox = create_element("#short_answer", "input", "type", "text", "");
     textbox.setAttribute("class", "text_answer form-control");
@@ -247,7 +253,6 @@ function create_short_answer() {
 
 function create_fill_in(choices) {
     let fill_in_form = create_element("#choices", "form", "id", "fill_in", "");
-    fill_in_form.setAttribute("class", "form-inline")
     let line_num = 0;
     for (line of choices) {
         create_element("#fill_in", "div", "class", `fill_in_line${line_num}`, "");
@@ -268,7 +273,8 @@ function correct_answer() {
     let feedback_arr = ["Great Job", "Excellent", "Awesome", "You're A Superstar", "Keep Going, You're Doing Amazing", "Amazing", "Fantastic", "Good Job", "Brilliant", "Genius"]
     let random = random_num(feedback_arr.length);
     let feedback = `${feedback_arr[random]} ${name}!`;
-    create_element(".quiz", "h1", "id", "correct_feedback", feedback);
+    let correct_feedback = create_element("#feedback", "h1", "id", "correct_feedback", feedback);
+    correct_feedback.setAttribute("class", "text-success");
     update_score(true);
     setTimeout(() => {
         generate_question(quiz_data);
@@ -277,8 +283,9 @@ function correct_answer() {
 
 
 function wrong_answer(reason) {
-    create_element(".quiz", "form", "id", "incorrect_form", "");
-    create_element("#incorrect_form", "h1", "id", "incorrect_feedback", reason);
+    create_element("#feedback", "form", "id", "incorrect_form", "");
+    let incorrect_feedback = create_element("#incorrect_form", "h1", "id", "incorrect_feedback", reason);
+    incorrect_feedback.setAttribute("class", "text-danger")
     create_element("#incorrect_form", "button", "class", "incorrect_feedback_button btn btn-info", "I Understand");
     update_score(false);
     document.querySelector("#incorrect_form").onsubmit = () => {
@@ -302,12 +309,15 @@ function update_score(bool) {
 
 
 function end_of_quiz() {
+    clearInterval(time);
     create_element("#quiz_section", "div", "id", "end", "");
 
     if (correct / answered.length >= .80) {
-        create_element("#end", "h2", "id", "passed_quiz", `Congraduations ${name}, you passed the quiz!`);
+        let congrats = create_element("#end", "h2", "id", "passed_quiz", `Congraduations ${name}, you passed the quiz!`);
+        congrats.setAttribute("class", "text-success")
     } else {
-        create_element("#end", "h2", "id", "failed_quiz", `Sorry ${name}, you failed the quiz.`);
+        let failed = create_element("#end", "h2", "id", "failed_quiz", `Sorry ${name}, you failed the quiz.`);
+        failed.setAttribute("class", "text-danger")
         create_element("#end", "button", "class", "retry btn btn-info", "Retry");
         create_element("#end", "button", "class", "exit btn btn-info", "Exit");
         document.querySelector(".retry").addEventListener("click", start_quiz);
