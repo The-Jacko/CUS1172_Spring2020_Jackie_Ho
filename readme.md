@@ -16,5 +16,5 @@ Jackie Ho
 <li>The application is hosted on Netlify</li>
 </ul>
 
-How I Deployed:
+How I Deployed:  
 To deploy on Netlify, I clicked on get started for free, which immediately asks me to link my Github account to the service. After linking my account, I clicked on create a new site which brings me to Githubs website and asks me to select which repository I would like to host. I selected CUS1172_Spring2020_Jackie_Ho repository. I then clicked install and entered my password. Next, I clicked on the repository I just installed and finally clicked deploy. The last thing I did was change the name of my project for a more suitable link. Whenever I need to update my hosted website, all I have to do is make the changes in my files and then commit and push them onto Github and the service provides all the tools to automatically update my webpage for me.
