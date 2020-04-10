@@ -7,14 +7,18 @@ body {
     background-color: #E9ECF0;
 }
 
-#user_data {
-    background-color: white;
-}
-
 .jumbotron {
     margin-top: 0;
+    margin-bottom: 0;
     padding-top: 32px;
     padding-bottom: 32px;
+    background-image: url("./pictures/coding-banner.png");
+}
+
+#title {
+    background-color: rgba(240, 240, 240, 0.502);
+    border-radius: 10px;
+    color: rgb(0, 0, 0);
 }
 
 .center {
@@ -43,10 +47,6 @@ body {
 
 .text_answer_submit {
     display: block;
-}
-
-#quiz_section {
-    background-color: #E9ECF0;
 }
 
 #question {
