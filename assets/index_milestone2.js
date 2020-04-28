@@ -1,36 +1,46 @@
-let correct = 0;
-let answered = [];
+let correct;
+let answered;
 let name, time, quiz_data;
+let quiz_choice, current_question, next_question;
+let api_url = "https://quiz-project-questions-api.herokuapp.com/api"
 
 
 document.addEventListener("DOMContentLoaded", () => {
 
-    get_quiz_list();
+    set_quiz_choices();
 
-    // document.querySelector("#user_form").onsubmit = start_quiz;
+    document.querySelector("#user_form").onsubmit = start_quiz;
 
     document.querySelector("#quiz_choice").addEventListener("change", () => {
         document.querySelector("#quiz_type_submit").value = "Start";
     });
 });
 
-let get_quiz_list = async () => {
-    let response = await fetch("https://quiz-project-questions-api.herokuapp.com/api/quiz/list");
-    let test_data = await response.json();
-    console.log(test_data);
+
+async function set_quiz_choices() {
+    const quiz_list_data = await get_api_data(`${api_url}/quiz/list`);
+    // loop through quiz list and dynamically generate Quiz names accordingly
+    let quiz_list = Object.values(quiz_list_data);
+    for (quiz of quiz_list) {
+        document.querySelector("#quiz_choice").options[quiz.id - 1].textContent = quiz.title;
+    }
 }
+
 
 function start_quiz() {
     // resets the answered questions everytime a new quiz is generated
-    answered = [];
+    answered = 0;
     correct = 0;
+    current_question = 1;
+    next_question = 0;
 
-    timer();
     remove_end_quiz_text();
     initialize_quiz();
     display_quiz();
+    timer();
     return false;
 }
+
 
 function timer() {
     clearInterval(time);
@@ -44,6 +54,7 @@ function timer() {
     }, 1000)
 }
 
+
 function remove_end_quiz_text() {
     try {
         document.querySelector("#end").remove();
@@ -53,65 +64,55 @@ function remove_end_quiz_text() {
 }
 
 
-let get_api_data = async (url) => {
-    let response = await fetch(url);
-    quiz_data = await response.json();
-    generate_question(quiz_data);
-}
-
-
 function initialize_quiz() {
     name = document.querySelector("#name_input").value;
 
     document.querySelector("#name").textContent = name;
+    document.querySelector("#name_input").style.display = "none";
     document.querySelector("#score").textContent = "Score: 0/0";
     document.querySelector("#grade").textContent = "Grade: 0%"
     document.querySelector("#quiz_type_submit").value = "Restart";
-    document.querySelector("#name_input").style.display = "none";
 }
 
 
-function display_quiz() {
-    let quiz_choice = document.querySelector("#quiz_choice").value;
+async function display_quiz() {
+    const quiz_list_data = await get_api_data(`${api_url}/quiz/list`);
+
+    quiz_choice = document.querySelector("#quiz_choice").value;
     let question = document.querySelector("#quiz_type");
-    let url;
+    let description = document.querySelector("#quiz_description");
 
-    if (quiz_choice == "1") {
-        question.textContent = "Web Development Quiz";
-        url = "https://my-json-server.typicode.com/jho2016/Quiz_Question_Database_1/quiz1";
-    } else {
-        question.textContent = "General Computer Science";
-        url = "https://my-json-server.typicode.com/jho2016/Quiz_Question_Database_2/quiz2";
-    }
+    question.textContent = quiz_list_data[quiz_choice]["title"];
+    description.textContent = quiz_list_data[quiz_choice]["description"];
 
-    get_api_data(url);
+    let url = `${api_url}/quiz/${quiz_choice}/${current_question}`;
+
+    generate_question(url);
 }
 
 
-function generate_question(data) {
+async function get_api_data(url) {
+    const response = await fetch(url);
+    const question_data = await response.json();
+    return question_data;
+}
+
+
+async function generate_question(url) {
     // re-enables submit button for quiz type once the new quiz is generated
     // fixes the problem of getting an answer right and then pressing submit, if you click it before the 3 seconds is up,
     // a new question will get generated even though you already generated a new question
     document.querySelector("#quiz_type_submit").disabled = false;
     remove_current_quiz();
 
-    if (answered.length < data.length) {
-        let random = random_num(data.length);
-        while (answered.includes(random)) {
-            random = random_num(data.length);
-        }
-        let question = data[random];
-        answered.push(random);
-
-        display_question(question);
-    } else {
+    if (next_question == -1) {
         end_of_quiz();
+    } else {
+        let question_data = await get_api_data(url);
+        current_question = question_data.id;
+        next_question = question_data.meta.next_question;
+        display_question(question_data);
     }
-}
-
-
-function random_num(length) {
-    return Math.floor(Math.random() * length);
 }
 
 
@@ -124,7 +125,7 @@ function remove_current_quiz() {
 }
 
 
-function display_question(data) {
+function display_question(data, url) {
     create_element("#quiz_section", "div", "class", "quiz container", "");
     create_element(".quiz", "h3", "id", "question", data.question);
     create_element(".quiz", "div", "id", "feedback", "");
@@ -143,11 +144,13 @@ function display_question(data) {
         create_fill_in(data.choices);
     }
 
-    check_answer(data);
+    check_answer(data, url);
 }
 
 
 function check_answer(data) {
+    let answer;
+
     if (data.type == "short answer") {
         let short_answer_form = document.querySelector("#short_answer");
         short_answer_form.onsubmit = function () {
@@ -194,13 +197,22 @@ function check_answer(data) {
                 disable_buttons(buttons)
                 this.classList.add("selected-choice")
 
-                if (this.value == data.answer) {
-                    correct_answer();
-                } else {
-                    wrong_answer(data.reason);
-                }
+                answer = this.value;
+                get_answer_api(answer);
             });
         }
+    }
+
+
+}
+
+async function get_answer_api(answer) {
+    let answer_url = `${api_url}/check_answer/${quiz_choice}/${current_question}/${answer}`;
+    let answer_data = await get_api_data(answer_url);
+    if (answer_data.correct == true) {
+        correct_answer(answer_data.feedback);
+    } else {
+        wrong_answer(answer_data.feedback);
     }
 }
 
@@ -277,15 +289,14 @@ function create_fill_in(choices) {
 }
 
 
-function correct_answer() {
-    let feedback_arr = ["Great Job", "Excellent", "Awesome", "You're A Superstar", "Keep Going, You're Doing Amazing", "Amazing", "Fantastic", "Good Job", "Brilliant", "Genius"]
-    let random = random_num(feedback_arr.length);
-    let feedback = `${feedback_arr[random]} ${name}!`;
+function correct_answer(encouraging_message) {
+    let feedback = `${encouraging_message} ${name}!`;
     let correct_feedback = create_element("#feedback", "h1", "id", "correct_feedback", feedback);
     correct_feedback.setAttribute("class", "text-success");
     update_score(true);
     setTimeout(() => {
-        generate_question(quiz_data);
+        let next_question_url = `${api_url}/quiz/${quiz_choice}/${next_question}`
+        generate_question(next_question_url);
     }, 1000);
 }
 
@@ -297,7 +308,8 @@ function wrong_answer(reason) {
     create_element("#incorrect_form", "button", "class", "incorrect_feedback_button btn btn-info", "I Understand");
     update_score(false);
     document.querySelector("#incorrect_form").onsubmit = () => {
-        generate_question(quiz_data);
+        let next_question_url = `${api_url}/quiz/${quiz_choice}/${next_question}`
+        generate_question(next_question_url);
         return false;
     }
 }
@@ -310,8 +322,9 @@ function update_score(bool) {
     if (bool == true) {
         correct++;
     }
-    score.textContent = `Score: ${correct}/${answered.length}`;
-    grade.textContent = `Grade: ${((correct/answered.length)*100).toFixed(2)}%`;
+    answered++;
+    score.textContent = `Score: ${correct}/${answered}`;
+    grade.textContent = `Grade: ${((correct/answered)*100).toFixed(2)}%`;
 
 }
 
@@ -320,7 +333,7 @@ function end_of_quiz() {
     clearInterval(time);
     create_element("#quiz_section", "div", "id", "end", "");
 
-    if (correct / answered.length >= .80) {
+    if (correct / answered >= .80) {
         let congrats = create_element("#end", "h2", "id", "passed_quiz", `Congraduations ${name}, you passed the quiz!`);
         congrats.setAttribute("class", "text-success")
     } else {
