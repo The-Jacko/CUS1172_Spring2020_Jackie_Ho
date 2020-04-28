@@ -45,8 +45,6 @@ router.get("/check_answer/:quizid/:questionid/:answer", function (req, res) {
         quiz_answer = quiz_1_answers[question_id];
     } else if (quiz_id == "2") {
         quiz_answer = quiz_2_answers[question_id];
-    } else {
-        res.send(`<h1>Quiz with id=${quiz_id} does not exist!</h1>`)
     }
 
     let response = {
@@ -58,7 +56,7 @@ router.get("/check_answer/:quizid/:questionid/:answer", function (req, res) {
 
     if (user_answer == quiz_answer.answer) {
         response.correct = true;
-        response.feedback = "Correct!"
+        response.feedback = encouraging_message();
     } else {
         response.correct = false;
         response.feedback = quiz_answer.reason;
@@ -66,5 +64,15 @@ router.get("/check_answer/:quizid/:questionid/:answer", function (req, res) {
     res.json(response);
 
 });
+
+function encouraging_message() {
+    let feedback_arr = ["Great Job", "Excellent", "Awesome", "You're A Superstar", "Keep Going, You're Doing Amazing", "Amazing", "Fantastic", "Good Job", "Brilliant", "Genius"]
+    let random = random_num(feedback_arr.length);
+    return feedback_arr[random];
+}
+
+function random_num(length) {
+    return Math.floor(Math.random() * length);
+}
 
 module.exports = router;
