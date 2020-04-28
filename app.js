@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 
-const api_routes = require("./routes/api_routes.js")
+const api_routes = require("./routes/api_routes.js");
 
 // middleware to solve CORS issue
 app.use(function (req, res, next) {
