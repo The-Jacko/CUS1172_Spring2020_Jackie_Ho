@@ -3,16 +3,13 @@ const app = express();
 
 const api_routes = require("./routes/api_routes.js")
 
-app.get("/", function (req, res) {
-    res.send("<h1>Homepage</h1>")
-})
-
 // middleware to solve CORS issue
 app.use(function (req, res, next) {
-    res.setHeader('Acess-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Origin', '*');
     next();
 });
 
+// all api routes
 app.use("/api", api_routes);
 
 const port = process.env.PORT || 5500
