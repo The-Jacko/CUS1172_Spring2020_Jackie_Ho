@@ -7,6 +7,11 @@ app.get("/", function (req, res) {
     res.send("<h1>Homepage</h1>")
 })
 
+// middleware to solve CORS issue
+app.use(function (req, res, next) {
+    res.setHeader('Acess-Control-Allow-Origin', '*')
+});
+
 app.use("/api", api_routes);
 
 const port = process.env.PORT || 5500

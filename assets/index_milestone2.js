@@ -14,11 +14,10 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
-async function get_quiz_list() {
-    const quiz_list_url = "http://localhost:5501/api/quiz/list";
-    let response = await fetch(quiz_list_url);
-    let data = await response.json();
-    console.log(data);
+let get_quiz_list = async () => {
+    let response = await fetch("https://quiz-project-questions-api.herokuapp.com/api/quiz/list");
+    let test_data = await response.json();
+    console.log(test_data);
 }
 
 function start_quiz() {
