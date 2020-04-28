@@ -9,7 +9,8 @@ app.get("/", function (req, res) {
 
 app.use("/api", api_routes);
 
+const port = process.env.PORT || 5500
 // listen for server
-app.listen(5501, function (req, res) {
+app.listen(port, function (req, res) {
     console.log("Server running...")
 });
