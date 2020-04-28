@@ -156,13 +156,9 @@ function check_answer(data) {
         short_answer_form.onsubmit = function () {
             document.querySelector(".text_answer_submit").disabled = true;
             let user_answer = document.querySelector(".text_answer").value.toLowerCase().trim();
-            const answer = data.answer.toLowerCase();
+            answer = data.answer.toLowerCase();
 
-            if (user_answer == answer) {
-                correct_answer();
-            } else {
-                wrong_answer(data.reason);
-            }
+            get_answer_api(answer);
             return false;
         };
     } else if (data.type == "fill in") {
@@ -202,8 +198,6 @@ function check_answer(data) {
             });
         }
     }
-
-
 }
 
 async function get_answer_api(answer) {
