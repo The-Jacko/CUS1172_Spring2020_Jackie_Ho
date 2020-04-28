@@ -5,12 +5,21 @@ let name, time, quiz_data;
 
 document.addEventListener("DOMContentLoaded", () => {
 
-    document.querySelector("#user_form").onsubmit = start_quiz;
+    get_quiz_list();
+
+    // document.querySelector("#user_form").onsubmit = start_quiz;
 
     document.querySelector("#quiz_choice").addEventListener("change", () => {
         document.querySelector("#quiz_type_submit").value = "Start";
     });
 });
+
+async function get_quiz_list() {
+    const quiz_list_url = "http://localhost:5501/api/quiz/list";
+    let response = await fetch(quiz_list_url);
+    let data = await response.json();
+    console.log(data);
+}
 
 function start_quiz() {
     // resets the answered questions everytime a new quiz is generated
@@ -19,7 +28,7 @@ function start_quiz() {
 
     timer();
     remove_end_quiz_text();
-    display_name();
+    initialize_quiz();
     display_quiz();
     return false;
 }
@@ -52,7 +61,7 @@ let get_api_data = async (url) => {
 }
 
 
-function display_name() {
+function initialize_quiz() {
     name = document.querySelector("#name_input").value;
 
     document.querySelector("#name").textContent = name;
