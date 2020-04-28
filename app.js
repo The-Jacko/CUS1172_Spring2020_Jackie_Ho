@@ -9,7 +9,8 @@ app.get("/", function (req, res) {
 
 // middleware to solve CORS issue
 app.use(function (req, res, next) {
-    res.setHeader('Acess-Control-Allow-Origin', '*')
+    res.setHeader('Acess-Control-Allow-Origin', '*');
+    next();
 });
 
 app.use("/api", api_routes);
