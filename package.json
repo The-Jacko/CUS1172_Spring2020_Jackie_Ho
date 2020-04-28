@@ -1,14 +1,23 @@
 {
-  "name": "quiz-project-milestone-2",
-  "version": "1.0.0",
-  "description": "",
-  "main": "app.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "express": "^4.17.1"
-  }
+    "name": "quiz-project-milestone-2",
+    "version": "1.0.0",
+    "description": "https://cus1172spring2020jackieho.netlify.com/",
+    "main": "app.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "express": "^4.17.1"
+    },
+    "devDependencies": {},
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/jho2016/Webpage-Graphics-Quiz-Project.git"
+    },
+    "bugs": {
+        "url": "https://github.com/jho2016/Webpage-Graphics-Quiz-Project/issues"
+    },
+    "homepage": "https://github.com/jho2016/Webpage-Graphics-Quiz-Project#readme"
 }
