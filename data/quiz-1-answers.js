@@ -51,7 +51,7 @@ var quiz_answers = {
     },
     11: {
         id: "11",
-        answer: "./assets/pictures/webDev/h1.png",
+        answer: "h1.png",
         reason: "<h1> produces the largest font size, which gets smaller as the numbers increase."
     },
     12: {
@@ -71,12 +71,12 @@ var quiz_answers = {
     },
     15: {
         id: "15",
-        answer: "./assets/pictures/webDev/ol.png",
+        answer: "ol.png",
         reason: "<ol> produces an ordered list that contains incrementing numbers."
     },
     16: {
         id: "16",
-        answer: "./assets/pictures/webDev/ul.png",
+        answer: "ul.png",
         reason: "<ol> produces an ordered list that contains incrementing numbers."
     },
     17: {

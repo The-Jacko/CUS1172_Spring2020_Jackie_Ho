@@ -156,9 +156,8 @@ function check_answer(data) {
         short_answer_form.onsubmit = function () {
             document.querySelector(".text_answer_submit").disabled = true;
             let user_answer = document.querySelector(".text_answer").value.toLowerCase().trim();
-            answer = data.answer.toLowerCase();
 
-            get_answer_api(answer);
+            get_answer_api(user_answer);
             return false;
         };
     } else if (data.type == "fill in") {
@@ -192,8 +191,9 @@ function check_answer(data) {
             button.addEventListener("click", function () {
                 disable_buttons(buttons)
                 this.classList.add("selected-choice")
-
                 answer = this.value;
+                // for pictures split on the path and just return the name of the picture
+                answer = answer.split("/").slice(-1)[0];
                 get_answer_api(answer);
             });
         }
