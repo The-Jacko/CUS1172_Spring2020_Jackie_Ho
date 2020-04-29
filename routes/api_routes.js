@@ -78,7 +78,7 @@ router.get("/check_answer/:quizid/:questionid/:answer", function (req, res) {
             response.feedback = encouraging_message();
         }
     } else { // for all other question types
-        if (user_answer == quiz_answer.answer.toLowerCase().trim()) {
+        if (user_answer.toLowerCase().trim() == quiz_answer.answer.toLowerCase().trim()) {
             response.correct = true;
             response.feedback = encouraging_message();
         } else {
