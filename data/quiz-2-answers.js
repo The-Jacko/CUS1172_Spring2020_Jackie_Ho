@@ -51,7 +51,7 @@ var quiz_answers = {
     },
     11: {
         id: "11",
-        "answer": "./assets/pictures/cs/addition.png",
+        "answer": "addition.png",
         "reason": "To get the sum, you must keep adding the values of the array into the variable total."
     },
     12: {
@@ -71,12 +71,12 @@ var quiz_answers = {
     },
     15: {
         id: "15",
-        "answer": "./assets/pictures/cs/python syntax 1.png",
+        "answer": "python syntax 1.png",
         "reason": "In Python, if statements use a capitalized 't' in True and Python also uses ':' instead of '{}'."
     },
     16: {
         id: "16",
-        "answer": "./assets/pictures/cs/java syntax.png",
+        "answer": "java syntax.png",
         "reason": "Unlike Python, Java uses if(condition) {body}. So, you need to remember the parenthesis around the condition and the curly braces around the body of the if statement."
     },
     17: {
