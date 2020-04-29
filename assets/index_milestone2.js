@@ -156,7 +156,9 @@ function check_answer(data) {
         short_answer_form.onsubmit = function () {
             document.querySelector(".text_answer_submit").disabled = true;
             let user_answer = document.querySelector(".text_answer").value.toLowerCase().trim();
-
+            if (user_answer.length < 1) {
+                user_answer = "emptyNoAnswer";
+            }
             get_answer_api(user_answer);
             return false;
         };
@@ -164,25 +166,19 @@ function check_answer(data) {
         let fill_in_form = document.querySelector("#fill_in");
         fill_in_form.onsubmit = function () {
             document.querySelector(".fill_in_submit").disabled = true;
-            let answers = document.querySelectorAll(".fill_in_textbox");
-
-            let incorrect = []
-            for (let i = 0; i < answers.length; i++) {
-                if (answers[i].value.toLowerCase().trim() != data.answer[i].toLowerCase().trim()) {
-                    incorrect.push(i);
+            let textboxes = document.querySelectorAll(".fill_in_textbox");
+            let answers = [];
+            for (var i = 0; i < textboxes.length; i++) {
+                if (textboxes[i].value.length < 1) {
+                    answers[i] = "emptyNoAnswer";
+                } else {
+                    answers[i] = textboxes[i].value.toLowerCase().trim();
                 }
             }
 
-            if (incorrect.length > 0) {
-                let reason = ""
-                for (i of incorrect) {
-                    reason += `${data.reason[i]}. `;
-                }
-                wrong_answer(reason);
-            } else {
-                correct_answer();
-            }
-
+            answer = answers.join("|");
+            console.log(answer);
+            get_answer_api(answer);
             return false;
         }
     } else {

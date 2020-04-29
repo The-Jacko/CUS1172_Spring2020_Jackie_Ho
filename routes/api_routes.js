@@ -41,6 +41,7 @@ router.get("/check_answer/:quizid/:questionid/:answer", function (req, res) {
     question_id = req.params.questionid;
     user_answer = req.params.answer;
 
+
     if (quiz_id == "1") {
         quiz_answer = quiz_1_answers[question_id];
     } else if (quiz_id == "2") {
@@ -54,13 +55,38 @@ router.get("/check_answer/:quizid/:questionid/:answer", function (req, res) {
         feedback: null
     };
 
-    if (user_answer == quiz_answer.answer) {
-        response.correct = true;
-        response.feedback = encouraging_message();
-    } else {
-        response.correct = false;
-        response.feedback = quiz_answer.reason;
+    // check if the answer is an array because then we have to check that each answer matches up
+    if (typeof (quiz_answer.answer) == "object") {
+        let user_answers = user_answer.split("|");
+        let incorrect = [];
+        for (var i = 0; i < quiz_answer.answer.length; i++) {
+            if (quiz_answer.answer[i].toLowerCase().trim() != user_answers[i]) {
+                incorrect.push(i);
+            }
+        }
+
+        if (incorrect.length > 0) {
+            let explanations;
+            for (i of incorrect) {
+                explanations += quiz_answer.reason[i];
+            }
+
+            response.correct = false;
+            response.feedback = explanations;
+        } else {
+            response.correct = true;
+            response.feedback = encouraging_message();
+        }
+    } else { // for all other question types
+        if (user_answer == quiz_answer.answer.toLowerCase().trim()) {
+            response.correct = true;
+            response.feedback = encouraging_message();
+        } else {
+            response.correct = false;
+            response.feedback = quiz_answer.reason;
+        }
     }
+
     res.json(response);
 
 });
