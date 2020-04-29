@@ -52,7 +52,8 @@ router.get("/check_answer/:quizid/:questionid/:answer", function (req, res) {
         question_id: question_id,
         user_answer: user_answer,
         correct: null,
-        feedback: null
+        feedback: null,
+        testing: quiz_answer.reason
     };
 
     // check if the answer is an array because then we have to check that each answer matches up
@@ -66,9 +67,9 @@ router.get("/check_answer/:quizid/:questionid/:answer", function (req, res) {
         }
 
         if (incorrect.length > 0) {
-            let explanations;
+            let explanations = "";
             for (i of incorrect) {
-                explanations += quiz_answer.reason[i];
+                explanations += `${quiz_answer.reason[i]}. `;
             }
 
             response.correct = false;

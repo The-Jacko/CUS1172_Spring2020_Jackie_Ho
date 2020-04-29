@@ -177,7 +177,6 @@ function check_answer(data) {
             }
 
             answer = answers.join("|");
-            console.log(answer);
             get_answer_api(answer);
             return false;
         }
@@ -202,6 +201,7 @@ async function get_answer_api(answer) {
     if (answer_data.correct == true) {
         correct_answer(answer_data.feedback);
     } else {
+        console.log(answer_data.feedback);
         wrong_answer(answer_data.feedback);
     }
 }
