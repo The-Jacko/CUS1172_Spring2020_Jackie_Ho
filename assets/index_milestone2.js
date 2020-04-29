@@ -201,7 +201,6 @@ async function get_answer_api(answer) {
     if (answer_data.correct == true) {
         correct_answer(answer_data.feedback);
     } else {
-        console.log(answer_data.feedback);
         wrong_answer(answer_data.feedback);
     }
 }
