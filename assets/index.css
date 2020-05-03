@@ -42,6 +42,16 @@ input[type=button]:disabled.selected-choice {
     opacity: 1;
 }
 
+
+input[type=image]:disabled.disabled-button {
+    opacity: .65;
+}
+
+input[type=image]:disabled.selected-choice {
+    border: 3px solid black;
+    opacity: 1;
+}
+
 .text_answer {
     width: 200px;
 }
