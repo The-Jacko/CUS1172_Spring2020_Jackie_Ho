@@ -200,6 +200,7 @@ function check_answer(data) {
 function disable_buttons(buttons) {
     for (button of buttons) {
         button.classList.add("disabled-button");
+        button.disabled = true;
     }
     document.querySelector("#quiz_type_submit").disabled = true;
 }
