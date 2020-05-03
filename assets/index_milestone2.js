@@ -189,11 +189,13 @@ function check_answer(data) {
                 answer = this.value;
                 // for pictures split on the path and just return the name of the picture
                 answer = answer.split("/").slice(-1)[0];
+                console.log(this);
                 get_answer_api(answer);
             });
         }
     }
 }
+
 
 async function get_answer_api(answer) {
     let answer_url = `${api_url}/check_answer/${quiz_choice}/${current_question}/${answer}`;
@@ -209,6 +211,7 @@ async function get_answer_api(answer) {
 function disable_buttons(buttons) {
     for (button of buttons) {
         button.classList.add("disabled-button");
+        button.disabled = true;
     }
     document.querySelector("#quiz_type_submit").disabled = true;
 }

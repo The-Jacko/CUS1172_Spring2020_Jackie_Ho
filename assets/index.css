@@ -37,8 +37,9 @@ body {
     pointer-events: none;
 }
 
-.selected-choice {
+input[type=button]:disabled.selected-choice {
     border: 3px solid black;
+    opacity: 1;
 }
 
 .text_answer {
