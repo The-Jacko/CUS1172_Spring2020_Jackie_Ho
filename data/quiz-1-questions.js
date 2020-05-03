@@ -172,7 +172,7 @@ var quiz_questions = {
         type: "pictures",
         choices: ["./assets/pictures/webDev/tr.png", "./assets/pictures/webDev/list.png", "./assets/pictures/webDev/ul.png", "./assets/pictures/webDev/ol.png"],
         answer: "ul.png",
-        reason: "<ol> produces an ordered list that contains incrementing numbers.",
+        reason: "<ul> produces an unordered/bulleted list.",
         meta: {
             next_question: "17"
         }
