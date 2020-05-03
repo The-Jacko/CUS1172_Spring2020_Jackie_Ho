@@ -1,6 +1,6 @@
 let correct;
 let answered;
-let name, time, quiz_data;
+let name, time;
 let quiz_choice, current_question, next_question;
 let api_url = "https://quiz-project-questions-api.herokuapp.com/api"
 

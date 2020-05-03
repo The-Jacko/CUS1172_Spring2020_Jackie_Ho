@@ -4,9 +4,7 @@ var router = express.Router();
 // data
 const quiz_list = require("../data/quiz-list.js");
 const quiz_1_questions = require("../data/quiz-1-questions.js");
-const quiz_1_answers = require("../data/quiz-1-answers.js");
 const quiz_2_questions = require("../data/quiz-2-questions.js");
-const quiz_2_answers = require("../data/quiz-2-answers.js");
 
 // variables
 let quiz_id;
@@ -28,11 +26,25 @@ router.get("/quiz/:quizid", function (req, res) {
 router.get("/quiz/:quizid/:questionid", function (req, res) {
     quiz_id = req.params.quizid;
     question_id = req.params.questionid;
+
+    let quiz_question;
     if (quiz_id == "1") {
-        res.json(quiz_1_questions[question_id]);
+        quiz_question = quiz_1_questions[question_id];
     } else if (quiz_id == "2") {
-        res.json(quiz_2_questions[question_id]);
+        quiz_question = quiz_2_questions[question_id];
     }
+
+    let question = {
+        "id": quiz_question.id,
+        "question": quiz_question.question,
+        "type": quiz_question.type,
+        "choices": quiz_question.choices,
+        "meta": {
+            "next_question": quiz_question.meta.next_question
+        }
+    }
+
+    res.json(question);
 });
 
 // check answer of quiz question
@@ -43,25 +55,24 @@ router.get("/check_answer/:quizid/:questionid/:answer", function (req, res) {
 
 
     if (quiz_id == "1") {
-        quiz_answer = quiz_1_answers[question_id];
+        quiz_question = quiz_1_questions[question_id];
     } else if (quiz_id == "2") {
-        quiz_answer = quiz_2_answers[question_id];
+        quiz_question = quiz_2_questions[question_id];
     }
 
     let response = {
-        question_id: question_id,
+        question_id: quiz_question.id,
         user_answer: user_answer,
         correct: null,
         feedback: null,
-        testing: quiz_answer.reason
     };
 
     // check if the answer is an array because then we have to check that each answer matches up
-    if (typeof (quiz_answer.answer) == "object") {
+    if (typeof (quiz_question.answer) == "object") {
         let user_answers = user_answer.split("|");
         let incorrect = [];
-        for (var i = 0; i < quiz_answer.answer.length; i++) {
-            if (quiz_answer.answer[i].toLowerCase().trim() != user_answers[i]) {
+        for (var i = 0; i < quiz_question.answer.length; i++) {
+            if (quiz_question.answer[i].toLowerCase().trim() != user_answers[i]) {
                 incorrect.push(i);
             }
         }
@@ -69,7 +80,7 @@ router.get("/check_answer/:quizid/:questionid/:answer", function (req, res) {
         if (incorrect.length > 0) {
             let explanations = "";
             for (i of incorrect) {
-                explanations += `${quiz_answer.reason[i]}. `;
+                explanations += `${quiz_question.reason[i]}. `;
             }
 
             response.correct = false;
@@ -79,12 +90,12 @@ router.get("/check_answer/:quizid/:questionid/:answer", function (req, res) {
             response.feedback = encouraging_message();
         }
     } else { // for all other question types
-        if (user_answer.toLowerCase().trim() == quiz_answer.answer.toLowerCase().trim()) {
+        if (user_answer.toLowerCase().trim() == quiz_question.answer.toLowerCase().trim()) {
             response.correct = true;
             response.feedback = encouraging_message();
         } else {
             response.correct = false;
-            response.feedback = quiz_answer.reason;
+            response.feedback = quiz_question.reason;
         }
     }
 
