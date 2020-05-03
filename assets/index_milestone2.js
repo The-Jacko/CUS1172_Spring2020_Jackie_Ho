@@ -189,7 +189,6 @@ function check_answer(data) {
                 answer = this.value;
                 // for pictures split on the path and just return the name of the picture
                 answer = answer.split("/").slice(-1)[0];
-                console.log(this);
                 get_answer_api(answer);
             });
         }
